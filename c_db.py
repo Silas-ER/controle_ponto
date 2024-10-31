@@ -1,6 +1,5 @@
 import sqlite3
 
-# Criação ou recriação do db caso necessário!
 def create_db():
     conn = sqlite3.connect('ponto.db')
     cursor = conn.cursor()
@@ -17,16 +16,52 @@ def create_db():
             observacao TEXT
         )
     ''')
+    conn.commit()
+    conn.close()
 
-# CRUD
-def create_register():
-    pass
+def create_register(data, setor, tipo_funcionario, nome_funcionario, hora_entrada, hora_saida, observacao):
+    conn = sqlite3.connect('ponto.db')
+    cursor = conn.cursor()
 
-def read_register():
-    pass 
+    cursor.execute('''
+        INSERT INTO ponto (data, setor, tipo_funcionario, nome_funcionario, hora_entrada, hora_saida, observacao)
+        VALUES (?, ?, ?, ?, ?, ?, ?)
+    ''', (data, setor, tipo_funcionario, nome_funcionario, hora_entrada, hora_saida, observacao))
 
-def update_register():
-    pass
+    conn.commit()
+    conn.close()
 
-def delete_register():
-    pass
+def read_registers():
+    conn = sqlite3.connect('ponto.db')
+    cursor = conn.cursor()
+
+    cursor.execute('SELECT * FROM ponto')
+    rows = cursor.fetchall()
+
+    conn.close()
+    return rows
+
+def update_register(id, data, setor, tipo_funcionario, nome_funcionario, hora_entrada, hora_saida, observacao):
+    conn = sqlite3.connect('ponto.db')
+    cursor = conn.cursor()
+
+    cursor.execute('''
+        UPDATE ponto
+        SET data = ?, setor = ?, tipo_funcionario = ?, nome_funcionario = ?, hora_entrada = ?, hora_saida = ?, observacao = ?
+        WHERE id = ?
+    ''', (data, setor, tipo_funcionario, nome_funcionario, hora_entrada, hora_saida, observacao, id))
+
+    conn.commit()
+    conn.close()
+
+def delete_register(id):
+    conn = sqlite3.connect('ponto.db')
+    cursor = conn.cursor()
+
+    cursor.execute('DELETE FROM ponto WHERE id = ?', (id,))
+
+    conn.commit()
+    conn.close()
+
+if __name__ == '__main__':
+    create_db()
