@@ -28,6 +28,14 @@ def create_db():
     ''')
     conn.commit()
     
+    cursor.execute('''
+        CREATE TABLE IF NOT EXISTS contrato (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            contract TEXT
+        )
+    ''')
+    conn.commit()
+    
     conn.close()
 
 def create_register(data, setor, tipo_funcionario, nome_funcionario, hora_entrada, hora_saida, observacao):

@@ -1,0 +1,5 @@
+#lista de setores
+setor = ['BENEFICIAMENTO', 'CAIS', 'CÂMARA FRIA', 'CARGA E DESCARGA', 'COPA', 'EMBALAGEM', 'LIMPEZA', 'QUALIDADE', 'RECEPÇÃO']
+
+#tipos de contrato
+tipo_contrato = ['CTPS', 'AVULSO']
