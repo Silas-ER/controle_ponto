@@ -1,0 +1,11 @@
+credentials:
+  usernames:
+    admin:
+      email: teste@teste.com
+      logged_in: False
+      name: admin
+      password: admin
+cookie:
+  expiry_days: 0
+  key: some_signinature_key
+  name: some_cookie_name
