@@ -6,6 +6,6 @@ credentials:
       name: admin
       password: admin
 cookie:
-  expiry_days: 0
+  expiry_days: 1
   key: some_signinature_key
   name: some_cookie_name
