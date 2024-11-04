@@ -44,7 +44,6 @@ if st.session_state["authentication_status"] is True:
     register_func = st.Page("pages/register.py", title="Cadastrar novo funcionário", icon="📖")
     register_dept = st.Page("pages/register_dept.py", title="Cadastrar novo departamento", icon="📖")
     delete_func = st.Page("pages/delete.py", title="Excluir funcionário", icon="🗑️")
-    delete_dept = st.Page("pages/delete_dept.py", title="Excluir departamento", icon="🗑️")
     
     metrics =  st.Page("pages/metrics.py", title="Métricas de funcionários", icon="📊")
     
@@ -52,7 +51,7 @@ if st.session_state["authentication_status"] is True:
     pg = st.navigation(
         {
             "Ponto": [in_out, diary, delete_register],
-            "Cadastros e Exclusões": [register_func, delete_func, register_dept, delete_dept],
+            "Cadastros e Exclusões": [register_func, delete_func, register_dept],
             "Métricas:": [metrics],
         }
     )

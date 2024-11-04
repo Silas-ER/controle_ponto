@@ -1,6 +1,6 @@
 import sqlite3, os
 
-# CR Departamento
+# CRUD Departamento
 def create_department(departamento):
     current_dir = os.path.dirname(os.path.abspath(__file__))
     db_path = os.path.join(current_dir, '../ponto.db')
@@ -19,15 +19,39 @@ def create_department(departamento):
         conn.close()
     
 def read_departments():
-    conn = sqlite3.connect('../ponto.db')
+    current_dir = os.path.dirname(os.path.abspath(__file__))
+    db_path = os.path.join(current_dir, '../ponto.db')
+
+    conn = sqlite3.connect(db_path)
     cursor = conn.cursor()
 
-    cursor.execute('SELECT * FROM departamento')
-    rows = cursor.fetchall()
+    try:
+        cursor.execute('SELECT * FROM departamento')
+        rows = cursor.fetchall()
+    except sqlite3.OperationalError as e:
+        print(f"Erro ao ler departamentos: {e}")
+    finally:
+         conn.close()
 
-    conn.close()
     return rows
 
+def delete_department(departamento):
+    current_dir = os.path.dirname(os.path.abspath(__file__))
+    db_path = os.path.join(current_dir, '../ponto.db')
+
+    # Conecta ao banco de dados
+    conn = sqlite3.connect(db_path)
+    cursor = conn.cursor()
+
+    # Executa a query SQL
+    try:
+        cursor.execute('DELETE INTO departamento (departamento) VALUES (?)', (departamento,))
+        conn.commit()
+    except sqlite3.OperationalError as e:
+        print(f"Erro ao deletar departamento: {e}")
+    finally:
+        conn.close()
+        
 # CRUD Ponto
 def create_register(data, setor, tipo_funcionario, nome_funcionario, hora_entrada, hora_saida, observacao):
     conn = sqlite3.connect('../ponto.db')
