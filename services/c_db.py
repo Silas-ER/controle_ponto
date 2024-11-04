@@ -38,6 +38,11 @@ def create_db():
         )
     ''')
     conn.commit()
+    
+    # insert de tipos de contrato
+    cursor.execute("INSERT INTO contrato (contract) VALUES ('AVULSO')")
+    cursor.execute("INSERT INTO contrato (contract) VALUES ('CTPS')")
+    conn.commit()
 
     # tabela de tipos de setores
     cursor.execute('''
