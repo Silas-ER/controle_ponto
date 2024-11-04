@@ -2,14 +2,15 @@ import sqlite3, os
 
 # CRUD Departamento
 def create_department(departamento):
+    # Caminho do banco de dados
     current_dir = os.path.dirname(os.path.abspath(__file__))
     db_path = os.path.join(current_dir, '../ponto.db')
 
-    # Conecta ao banco de dados
+    # Conexão ao banco de dados
     conn = sqlite3.connect(db_path)
     cursor = conn.cursor()
 
-    # Executa a query SQL
+    # Execução da query SQL
     try:
         cursor.execute('INSERT INTO departamento (departamento) VALUES (?)', (departamento,))
         conn.commit()
@@ -35,17 +36,18 @@ def read_departments():
 
     return rows
 
-def delete_department(departamento):
+def delete_department(id_departamento):
+    # Caminho do banco de dados
     current_dir = os.path.dirname(os.path.abspath(__file__))
     db_path = os.path.join(current_dir, '../ponto.db')
 
-    # Conecta ao banco de dados
+    # Conexão ao banco de dados
     conn = sqlite3.connect(db_path)
     cursor = conn.cursor()
 
-    # Executa a query SQL
+    # Execução da query SQL
     try:
-        cursor.execute('DELETE INTO departamento (departamento) VALUES (?)', (departamento,))
+        cursor.execute('DELETE FROM departamento WHERE id = ?', (id_departamento,))
         conn.commit()
     except sqlite3.OperationalError as e:
         print(f"Erro ao deletar departamento: {e}")
