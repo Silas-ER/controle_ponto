@@ -62,6 +62,7 @@ with st.form("deletar_funcionario"):
             if funcionario_selecionado:
                 id_setor = funcionario_selecionado[3]  # Assumindo que o id_setor está na posição 2
                 id_contrato = funcionario_selecionado[2]  # Assumindo que o id_contrato está na posição 3
+                id_funcionario = funcionario_selecionado[0]
                 
                 setor_selecionado = get_department_name(id_setor)
                 contrato_selecionado = get_contrato_name(id_contrato)
@@ -72,4 +73,9 @@ with st.form("deletar_funcionario"):
                     contrato_funcionarios = st.text_input('Contrato:', contrato_selecionado, disabled=True)
                     
     if st.form_submit_button("Deletar"):
-        pass
+        try:
+            delete_funcionario(id_funcionario)
+            st.success("Funcionário deletado com sucesso!")
+        except Exception as e:
+            st.error(f"Erro ao deletar funcionário: {e}")
+           
