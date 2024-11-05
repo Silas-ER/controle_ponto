@@ -3,7 +3,7 @@ import sqlite3, os
 def create_db():
     conn = sqlite3.connect('../ponto.db')
     cursor = conn.cursor()
-
+    
     # tabela de ponto
     cursor.execute('''
         CREATE TABLE IF NOT EXISTS ponto (
@@ -58,13 +58,15 @@ def create_db():
         CREATE TABLE IF NOT EXISTS funcionario (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             nome TEXT,
-            contrato TEXT,
-            departamento TEXT
+            contrato INTEGER,
+            departamento INTEGER,
+            FOREIGN KEY (contrato) REFERENCES contrato(id),
+            FOREIGN KEY (departamento) REFERENCES departamento(id)
         )
     ''')
     conn.commit()
 
     conn.close()
-    
+
 if __name__ == '__main__':
     create_db()
