@@ -60,8 +60,8 @@ with st.form("deletar_funcionario"):
             # Encontrar o funcionário selecionado e capturar setor e contrato
             funcionario_selecionado = next((f for f in funcionarios if f[1] == funcionarios_del), None)
             if funcionario_selecionado:
-                id_setor = funcionario_selecionado[3]  # Assumindo que o id_setor está na posição 2
-                id_contrato = funcionario_selecionado[2]  # Assumindo que o id_contrato está na posição 3
+                id_setor = funcionario_selecionado[3] 
+                id_contrato = funcionario_selecionado[2]  
                 id_funcionario = funcionario_selecionado[0]
                 
                 setor_selecionado = get_department_name(id_setor)
