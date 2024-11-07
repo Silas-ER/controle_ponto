@@ -37,49 +37,6 @@ A [API](https://static.loongship.com/dataApi/api.html#_3-1-%E8%88%B9%E8%88%B6%E6
 <br>
 O app foi construido com base em um menu lateral feito com o componente ```st.navigation``` contendo todas as solicitações feitas anteriormente na descrição do projeto, separadas por blocos utilizando o ```st.Page```. Ao abrir o "site" hospedado localmente o usuário se depara com a página inicial: <br>
 
-<div align="center">
-  <a href="#"><img src="src/1.png" width="900"></a>
-  <p>Que mostra os dados de última localizção (mais recente) de cada barco que esteja incluido numa lista contendo NOME e MMSI que são utilizados como parâmetro para pesquisa na API.</p>
-</div>
-
-<br>
-
-<div align="center">
-  <a href="#"><img src="src/2.png" width="900"></a>
-  <p>Continuando a página o usuário encontrará os dados referentes a pesquisa retornada, em formato de "tabela", esse dados geralmente retornam da API em formato .json</p>
-</div>
-
-<br>
-
-<div align="center">
-  <a href="#"><img src="src/3.png" width="900"></a>
-  <p>Para alternar entre as páginas, utilizamos um menu lateral, como pode ser visto na imagem.</p>
-</div>
-
-<br>
-
-<div align="center">
-  <a href="#"><img src="src/4.png" width="900"></a>
-  <p>Na página de histórico de movimentação temos dois data inputs para uma data inicial e final utilizados como intervalo para pesquisa, e um select box gerado a partir a lista informada anteriormente.
-  Com isso é gerado um mapa com todas as movimentações do barco naquele período, unidas por linhas setadas.</p>
-</div>
-
-<br>
-
-<div align="center">
-  <a href="#"><img src="src/5.png" width="900"></a>
-  <p>Afim de manter a coerência da leitura do código, inplementei a possibilidade do usuário inserir novos barcos ou excluir do sistema através de uma página especifica, evitando inserções de maneira
-  diferente e mantendo a constância do script.</p>
-</div>
-
-<br>
-
-<div align="center">
-  <a href="#"><img src="src/6.png" width="900"></a>
-  <p>Por fim, temos a última página contendo uma pesquisa geral, onde o usuário entra com um nome de barco e o sistema busca na API referências desse veículo, filtrando antes da exibição se ele é pesqueiro ou
-  não e retornando ao usuário referências que podem ser utilizadas para a inserção no mapa individual dele.</p>
-</div>
-
 ## Desafios e Melhorias
 
 Acredito que para uma versão inicial o app está bem coeso e funcional mas acrescentaria como pontos a serem melhorados: 
