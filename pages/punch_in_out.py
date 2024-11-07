@@ -1,7 +1,7 @@
 import streamlit as st
 from services.crud import read_funcionarios, read_contratos, read_setors
 from datetime import datetime
-from services.crud import get_setor_name, get_contrato_name
+from services.crud import get_setor_name, get_contrato_name, get_contrato_id, get_setor_id, get_funcionario_id
 from services.crud import create_register
 
 # Funções para validar data e hora
@@ -46,31 +46,54 @@ if 'contrato_selecionado' not in st.session_state:
 st.write("### Registrar Ponto")
 
 with st.container():
-    col1, col2, col3 = st.columns(3)
+    col1, col2, col3, col4 = st.columns([1.6,0.8,0.8,0.8])
 
-    # Campo para selecionar o funcionário
-    with col1:
-        st.selectbox('Nome do funcionário:', nome_funcionarios, key="funcionario_selecionado", on_change=atualizar_dados_funcionario)
+    # Campos para selecionar o funcionário e data
+    with col1: st.selectbox('Nome do funcionário:', nome_funcionarios, key="funcionario_selecionado", on_change=atualizar_dados_funcionario)
+    with col2: st.text_input('Setor:', st.session_state['setor_selecionado'], disabled=True)    
+    with col3: st.text_input('Contrato:', st.session_state['contrato_selecionado'], disabled=True)  
+    with col4:
         data_input = st.text_input('Data (DD/MM/YYYY):')
-        if data_input: data_valida = validar_data(data_input)
-
-    # Campos de setor e contrato, usando session_state para garantir atualização
-    with col2:
-        st.text_input('Setor:', st.session_state['setor_selecionado'], disabled=True)
-        hora_entrada_input = st.text_input('Entrada (HH:MM):')
-        if hora_entrada_input: hora_entrada_valida = validar_hora(hora_entrada_input)
-
+        if data_input: data_valida = validar_data(data_input)  
+          
+    # Alteração do tamanho das colunas
+    col1, col2, col3, col4 = st.columns(4)
+    
+    # Campos para entrada e saída
+    with col1:
+        hora_entrada1_input = st.text_input('Entrada 1 (HH:MM):')
+        if hora_entrada1_input: hora_entrada1_valida = validar_hora(hora_entrada1_input)
+            
+    with col2:    
+        hora_saida1_input = st.text_input('Saída 1 (HH:MM):')
+        if hora_saida1_input: hora_saida1_valida = validar_hora(hora_saida1_input)      
+          
     with col3:
-        st.text_input('Contrato:', st.session_state['contrato_selecionado'], disabled=True)
-        hora_saida_input = st.text_input('Saída (HH:MM):')
-        if hora_saida_input: hora_saida_valida = validar_hora(hora_saida_input)
+        hora_entrada2_input = st.text_input('Entrada 2 (HH:MM):')
+        if hora_entrada2_input: hora_entrada2_valida = validar_hora(hora_entrada2_input)
 
+    with col4:    
+        hora_saida2_input = st.text_input('Saída 2 (HH:MM):')
+        if hora_saida2_input: hora_saida2_valida = validar_hora(hora_saida2_input)          
+        
 observacao = st.text_input('Observação:')
 
 # Botão para registrar o ponto, somente se todas as entradas forem válidas
 if st.button("Registrar"):
-    if data_valida and hora_entrada_valida and hora_saida_valida:
-        create_register(data_valida, st.session_state['setor_selecionado'], st.session_state['contrato_selecionado'], st.session_state["funcionario_selecionado"], hora_entrada_valida, hora_saida_valida, observacao)
-        st.success("Ponto registrado com sucesso!")
+    if data_valida and hora_entrada1_valida and hora_saida1_valida and hora_entrada2_valida and hora_saida2_valida:
+        # Obtenha os IDs dos nomes selecionados
+        id_funcionario = get_funcionario_id(st.session_state["funcionario_selecionado"])
+        id_setor = get_setor_id(st.session_state['setor_selecionado'])
+        id_contrato = get_contrato_id(st.session_state['contrato_selecionado'])
+        
+        if id_funcionario and id_setor and id_contrato:
+            create_register(
+                str(data_valida), id_setor, id_contrato, 
+                id_funcionario, str(hora_entrada1_valida), str(hora_saida1_valida), 
+                str(hora_entrada2_valida), str(hora_saida2_valida), observacao
+            )
+            st.success("Ponto registrado com sucesso!") 
+        else:
+            st.error("Erro ao obter IDs para funcionário, setor ou contrato.")
     else:
         st.error("Por favor, corrija os campos com erro.")

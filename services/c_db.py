@@ -4,16 +4,23 @@ def create_db():
     conn = sqlite3.connect('../ponto.db')
     cursor = conn.cursor()
     
+    cursor.execute('''
+                   DROP TABLE IF EXISTS ponto
+                     ''')
+    conn.commit()
+    
     # tabela de ponto
     cursor.execute('''
         CREATE TABLE IF NOT EXISTS ponto (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             data TEXT,
-            setor TEXT,
-            contrato TEXT,
+            setor INTEGER,
+            contrato INTEGER,
             funcionario INTEGER,
-            entrada TEXT,
-            saida TEXT,
+            entrada1 TEXT,
+            saida1 TEXT,
+            entrada2 TEXT,
+            saida2 TEXT,
             observacao TEXT,
             FOREIGN KEY (funcionario) REFERENCES funcionario(id),
             FOREIGN KEY (contrato) REFERENCES contrato(id),
@@ -42,11 +49,13 @@ def create_db():
     ''')
     conn.commit()
     
+    """
     # insert de tipos de contrato
     cursor.execute("INSERT INTO contrato (contrato) VALUES ('AVULSO')")
     cursor.execute("INSERT INTO contrato (contrato) VALUES ('CTPS')")
     conn.commit()
-
+    """
+    
     # tabela de tipos de setores
     cursor.execute('''
         CREATE TABLE IF NOT EXISTS setor (

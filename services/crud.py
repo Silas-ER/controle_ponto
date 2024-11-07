@@ -75,7 +75,27 @@ def get_setor_name(setor_id):
         conn.close()
 
     return setor_nome
- 
+
+def get_setor_id(nome_setor):
+    # Caminho do banco de dados
+    current_dir = os.path.dirname(os.path.abspath(__file__))
+    db_path = os.path.join(current_dir, '../ponto.db')
+
+    # Conexão ao banco de dados
+    conn = sqlite3.connect(db_path)
+    cursor = conn.cursor()
+    
+    try:
+        cursor.execute("SELECT id FROM setor WHERE setor = ?", (nome_setor,))
+        result = cursor.fetchone()
+        return result[0] if result else None
+    except sqlite3.OperationalError as e:
+        print(f"Erro ao buscar setor: {e}")
+        return None
+    finally:
+         conn.close()
+          
+##########################################################################################################################################
  
 # CRUD Contrato
 def read_contratos():
@@ -117,6 +137,26 @@ def get_contrato_name(contrato_id):
 
     return contrato_nome
 
+def get_contrato_id(nome_contrato):
+    # Caminho do banco de dados
+    current_dir = os.path.dirname(os.path.abspath(__file__))
+    db_path = os.path.join(current_dir, '../ponto.db')
+
+    # Conexão ao banco de dados
+    conn = sqlite3.connect(db_path)
+    cursor = conn.cursor()
+    
+    try:
+        cursor.execute("SELECT id FROM contrato WHERE contrato = ?", (nome_contrato,))
+        result = cursor.fetchone()
+        return result[0] if result else None
+    except sqlite3.OperationalError as e:
+        print(f"Erro ao buscar contrato: {e}")
+        return None
+    finally:
+         conn.close()
+         
+##########################################################################################################################################
 
 # CRUD Funcionário
 def create_funcionario(funcionario, id_setor, id_contrato):
@@ -189,19 +229,48 @@ def delete_funcionario(id_funcionario):
 
     return id_funcionario, nome_funcionario, id_contrato, id_setor
                
+def get_funcionario_id(nome_funcionario):
+    # Caminho do banco de dados
+    current_dir = os.path.dirname(os.path.abspath(__file__))
+    db_path = os.path.join(current_dir, '../ponto.db')
+
+    # Conexão ao banco de dados
+    conn = sqlite3.connect(db_path)
+    cursor = conn.cursor()
+    
+    try:
+        cursor.execute("SELECT id FROM funcionario WHERE nome = ?", (nome_funcionario,))
+        result = cursor.fetchone()
+        return result[0] if result else None
+    except sqlite3.OperationalError as e:
+        print(f"Erro ao buscar funcionario: {e}")
+        return None
+    finally:
+         conn.close()
+         
+##########################################################################################################################################
                
 # CRUD Ponto
-def create_register(data, id_setor, id_contrato, id_funcionario, entrada, saida, observacao):
-    conn = sqlite3.connect('../ponto.db')
+def create_register(data, id_setor, id_contrato, id_funcionario, entrada1, saida1, entrada2, saida2, observacao):
+    # Caminho do banco de dados
+    current_dir = os.path.dirname(os.path.abspath(__file__))
+    db_path = os.path.join(current_dir, '../ponto.db')
+
+    # Conexão ao banco de dados
+    conn = sqlite3.connect(db_path)
     cursor = conn.cursor()
 
-    cursor.execute('''
-        INSERT INTO ponto (data, setor, contrato, funcionario, entrada, saida, observacao)
-        VALUES (?, ?, ?, ?, ?, ?, ?)
-    ''', (data, id_setor, id_contrato, id_funcionario, entrada, saida, observacao))
-
-    conn.commit()
-    conn.close()
+    # Execução da query SQL
+    try:
+        cursor.execute('''
+        INSERT INTO ponto (data, setor, contrato, funcionario, entrada1, saida1, entrada2, saida2, observacao)
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+                       ''', (data, id_setor, id_contrato, id_funcionario, entrada1, saida1, entrada2, saida2, observacao))
+        conn.commit()
+    except sqlite3.OperationalError as e:
+        print(f"Erro ao inserir setor: {e}")
+    finally:
+        conn.close()
 
 def read_registers():
     conn = sqlite3.connect('../ponto.db')
@@ -213,15 +282,15 @@ def read_registers():
     conn.close()
     return rows
 
-def update_register(id, data, id_setor, id_contrato, id_funcionario, entrada, saida, observacao):
+def update_register(id, data, id_setor, id_contrato, id_funcionario, entrada1, saida1, entrada2, saida2, observacao):
     conn = sqlite3.connect('../ponto.db')
     cursor = conn.cursor()
 
     cursor.execute('''
         UPDATE ponto
-        SET data = ?, setor = ?, contrato = ?, nome_funcionario = ?, entrada = ?, saida = ?, observacao = ?
+        SET data = ?, setor = ?, contrato = ?, nome_funcionario = ?, entrada1 = ?, saida1 = ?, entrada2 = ?, saida2 = ? observacao = ?
         WHERE id = ?
-    ''', (data, id_setor, id_contrato, id_funcionario, entrada, saida, observacao, id))
+    ''', (data, id_setor, id_contrato, id_funcionario, entrada1, saida1, entrada2, saida2, observacao, id))
 
     conn.commit()
     conn.close()
