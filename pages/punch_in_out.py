@@ -1,16 +1,10 @@
 import streamlit as st
-from services.crud import read_funcionarios, read_contrato, read_departments
+from services.crud import read_funcionarios, read_contratos, read_setors
 from datetime import datetime
+from services.crud import get_setor_name, get_contrato_name
+from services.crud import create_register
 
-def get_setor_id(setores, selected_setor):
-    return next((id for id, nome in setores if nome == selected_setor), None)
-
-def get_contrato_id(contratos, tipo_funcionario):
-    return next((id for id, nome in contratos if nome == tipo_funcionario), None)
-
-def get_funcionarios_ativos(funcionarios, id_contrato, id_setor):
-    return [nome for id, nome, contrato, departamento in funcionarios if contrato == id_contrato and departamento == id_setor]
-
+# Funções para validar data e hora
 def validar_data(data_str):
     try:
         return datetime.strptime(data_str, '%d/%m/%Y')
@@ -25,54 +19,58 @@ def validar_hora(hora_str):
         st.error("Hora inválida. Use o formato HH:MM.")
         return None
 
-with st.form("ponto"):
-    st.write("### Registrar Ponto")
-    
-    with st.container():
-        col1, col2, col3 = st.columns([1, 1, 1])
-        
-        # Manipulação de dados de setores e contratos
-        setores = read_departments()
-        contratos = read_contrato()
-        
-        nomes_setores = [nome for id, nome in setores]
-        nomes_contratos = [nome for id, nome in contratos]
-        
-        # Manipulação de dados de funcionários
-        funcionarios = read_funcionarios()
-        
-        # Campos de seleção
-        with col1:
-            selected_setor = st.selectbox('Setor:', nomes_setores)
-            data_input = st.text_input('Data (DD/MM/YYYY):')
-            data_valida = validar_data(data_input)
-        
-        with col2:
-            tipo_funcionario = st.selectbox('Tipo de funcionário:', nomes_contratos)
-            hora_entrada_input = st.text_input('Entrada (HH:MM):')
-            hora_entrada_valida = validar_hora(hora_entrada_input)
-        
-        with col3:
-            # Obtenção dos IDs do setor e contrato
-            id_setor = get_setor_id(setores, selected_setor)
-            id_contrato = get_contrato_id(contratos, tipo_funcionario)
-            
-            # Filtragem de funcionários ativos
-            if id_setor is not None and id_contrato is not None:
-                funcionarios_ativos = get_funcionarios_ativos(funcionarios, id_contrato, id_setor)
-            else:
-                funcionarios_ativos = [nome for id, nome, _, _ in funcionarios]  # Todos os funcionários
-            
-            nome_funcionario = st.selectbox('Nome do funcionário:', funcionarios_ativos)
-            hora_saida_input = st.text_input('Saída (HH:MM):')
-            hora_saida_valida = validar_hora(hora_saida_input)
-    
-    observacao = st.text_input('Observação:')
-    
-    # Botão para registrar o ponto, somente se todas as entradas forem válidas
-    if st.form_submit_button("Registrar"):
-        if data_valida and hora_entrada_valida and hora_saida_valida:
-            # Aqui você pode adicionar a lógica para registrar o ponto
-            st.success("Ponto registrado com sucesso!")
-        else:
-            st.error("Por favor, corrija os campos com erro.")
+# Função para atualizar setor e contrato com base no funcionário selecionado
+def atualizar_dados_funcionario():
+    funcionarios_selecionado = st.session_state["funcionario_selecionado"]
+    if funcionarios_selecionado:
+        funcionario = next((f for f in funcionarios if f[1] == funcionarios_selecionado), None)
+        if funcionario:
+            id_setor = funcionario[3]
+            id_contrato = funcionario[2]
+            st.session_state['setor_selecionado'] = get_setor_name(id_setor)
+            st.session_state['contrato_selecionado'] = get_contrato_name(id_contrato)
+
+# Carregar dados iniciais de setores, contratos e funcionários
+setores = read_setors()
+contratos = read_contratos()
+funcionarios = read_funcionarios()
+nome_funcionarios = [nome for id, nome, *_ in funcionarios]
+
+# Inicializar session_state para setor e contrato selecionados
+if 'setor_selecionado' not in st.session_state:
+    st.session_state['setor_selecionado'] = ""
+if 'contrato_selecionado' not in st.session_state:
+    st.session_state['contrato_selecionado'] = ""
+
+# Layout para registrar ponto
+st.write("### Registrar Ponto")
+
+with st.container():
+    col1, col2, col3 = st.columns(3)
+
+    # Campo para selecionar o funcionário
+    with col1:
+        st.selectbox('Nome do funcionário:', nome_funcionarios, key="funcionario_selecionado", on_change=atualizar_dados_funcionario)
+        data_input = st.text_input('Data (DD/MM/YYYY):')
+        if data_input: data_valida = validar_data(data_input)
+
+    # Campos de setor e contrato, usando session_state para garantir atualização
+    with col2:
+        st.text_input('Setor:', st.session_state['setor_selecionado'], disabled=True)
+        hora_entrada_input = st.text_input('Entrada (HH:MM):')
+        if hora_entrada_input: hora_entrada_valida = validar_hora(hora_entrada_input)
+
+    with col3:
+        st.text_input('Contrato:', st.session_state['contrato_selecionado'], disabled=True)
+        hora_saida_input = st.text_input('Saída (HH:MM):')
+        if hora_saida_input: hora_saida_valida = validar_hora(hora_saida_input)
+
+observacao = st.text_input('Observação:')
+
+# Botão para registrar o ponto, somente se todas as entradas forem válidas
+if st.button("Registrar"):
+    if data_valida and hora_entrada_valida and hora_saida_valida:
+        create_register(data_valida, st.session_state['setor_selecionado'], st.session_state['contrato_selecionado'], st.session_state["funcionario_selecionado"], hora_entrada_valida, hora_saida_valida, observacao)
+        st.success("Ponto registrado com sucesso!")
+    else:
+        st.error("Por favor, corrija os campos com erro.")

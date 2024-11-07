@@ -9,12 +9,15 @@ def create_db():
         CREATE TABLE IF NOT EXISTS ponto (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             data TEXT,
-            departament TEXT,
-            tipo_funcionario TEXT,
-            nome_funcionario TEXT,
-            hora_entrada TEXT,
-            hora_saida TEXT,
-            observacao TEXT
+            setor TEXT,
+            contrato TEXT,
+            funcionario INTEGER,
+            entrada TEXT,
+            saida TEXT,
+            observacao TEXT,
+            FOREIGN KEY (funcionario) REFERENCES funcionario(id),
+            FOREIGN KEY (contrato) REFERENCES contrato(id),
+            FOREIGN KEY (setor) REFERENCES setor(id)
         )
     ''')
     conn.commit()
@@ -23,7 +26,7 @@ def create_db():
     cursor.execute('''
         CREATE TABLE IF NOT EXISTS user (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
-            department TEXT,
+            setor TEXT,
             user TEXT,
             password TEXT
         )
@@ -34,21 +37,21 @@ def create_db():
     cursor.execute('''
         CREATE TABLE IF NOT EXISTS contrato (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
-            contract TEXT
+            contrato TEXT
         )
     ''')
     conn.commit()
     
     # insert de tipos de contrato
-    cursor.execute("INSERT INTO contrato (contract) VALUES ('AVULSO')")
-    cursor.execute("INSERT INTO contrato (contract) VALUES ('CTPS')")
+    cursor.execute("INSERT INTO contrato (contrato) VALUES ('AVULSO')")
+    cursor.execute("INSERT INTO contrato (contrato) VALUES ('CTPS')")
     conn.commit()
 
     # tabela de tipos de setores
     cursor.execute('''
-        CREATE TABLE IF NOT EXISTS departamento (
+        CREATE TABLE IF NOT EXISTS setor (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
-            departamento TEXT
+            setor TEXT
         )
     ''')
     conn.commit()
@@ -59,9 +62,9 @@ def create_db():
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             nome TEXT,
             contrato INTEGER,
-            departamento INTEGER,
+            setor INTEGER,
             FOREIGN KEY (contrato) REFERENCES contrato(id),
-            FOREIGN KEY (departamento) REFERENCES departamento(id)
+            FOREIGN KEY (setor) REFERENCES setor(id)
         )
     ''')
     conn.commit()

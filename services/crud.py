@@ -1,7 +1,7 @@
 import sqlite3, os
 
-# CRUD Departamento
-def create_department(departamento):
+# CRUD Setor
+def create_setor(setor):
     # Caminho do banco de dados
     current_dir = os.path.dirname(os.path.abspath(__file__))
     db_path = os.path.join(current_dir, '../ponto.db')
@@ -12,14 +12,14 @@ def create_department(departamento):
 
     # Execução da query SQL
     try:
-        cursor.execute('INSERT INTO departamento (departamento) VALUES (?)', (departamento,))
+        cursor.execute('INSERT INTO setor (setor) VALUES (?)', (setor,))
         conn.commit()
     except sqlite3.OperationalError as e:
-        print(f"Erro ao inserir departamento: {e}")
+        print(f"Erro ao inserir setor: {e}")
     finally:
         conn.close()
     
-def read_departments():
+def read_setors():
     current_dir = os.path.dirname(os.path.abspath(__file__))
     db_path = os.path.join(current_dir, '../ponto.db')
 
@@ -27,16 +27,16 @@ def read_departments():
     cursor = conn.cursor()
 
     try:
-        cursor.execute('SELECT * FROM departamento')
+        cursor.execute('SELECT * FROM setor')
         rows = cursor.fetchall()
     except sqlite3.OperationalError as e:
-        print(f"Erro ao ler departamentos: {e}")
+        print(f"Erro ao ler setors: {e}")
     finally:
          conn.close()
 
     return rows
 
-def delete_department(id_departamento):
+def delete_setor(id_setor):
     # Caminho do banco de dados
     current_dir = os.path.dirname(os.path.abspath(__file__))
     db_path = os.path.join(current_dir, '../ponto.db')
@@ -47,14 +47,14 @@ def delete_department(id_departamento):
 
     # Execução da query SQL
     try:
-        cursor.execute('DELETE FROM departamento WHERE id = ?', (id_departamento,))
+        cursor.execute('DELETE FROM setor WHERE id = ?', (id_setor,))
         conn.commit()
     except sqlite3.OperationalError as e:
-        print(f"Erro ao deletar departamento: {e}")
+        print(f"Erro ao deletar setor: {e}")
     finally:
         conn.close()
 
-def get_department_name(department_id):
+def get_setor_name(setor_id):
     current_dir = os.path.dirname(os.path.abspath(__file__))
     db_path = os.path.join(current_dir, '../ponto.db')
 
@@ -62,23 +62,23 @@ def get_department_name(department_id):
     cursor = conn.cursor()
 
     try:
-        cursor.execute('SELECT departamento FROM departamento WHERE id = ?', (department_id,))
-        departamento_nome = cursor.fetchone()
-        if departamento_nome:
-            departamento_nome = departamento_nome[0]
+        cursor.execute('SELECT setor FROM setor WHERE id = ?', (setor_id,))
+        setor_nome = cursor.fetchone()
+        if setor_nome:
+            setor_nome = setor_nome[0]
         else:
-            departamento_nome = None
+            setor_nome = None
     except sqlite3.OperationalError as e:
-        print(f"Erro ao ler departamento: {e}")
-        departamento_nome = None
+        print(f"Erro ao ler setor: {e}")
+        setor_nome = None
     finally:
         conn.close()
 
-    return departamento_nome
+    return setor_nome
  
  
 # CRUD Contrato
-def read_contrato():
+def read_contratos():
     current_dir = os.path.dirname(os.path.abspath(__file__))
     db_path = os.path.join(current_dir, '../ponto.db')
 
@@ -103,7 +103,7 @@ def get_contrato_name(contrato_id):
     cursor = conn.cursor()
 
     try:
-        cursor.execute('SELECT contract FROM contrato WHERE id = ?', (contrato_id,))
+        cursor.execute('SELECT contrato FROM contrato WHERE id = ?', (contrato_id,))
         contrato_nome = cursor.fetchone()
         if contrato_nome:
             contrato_nome = contrato_nome[0]
@@ -130,7 +130,7 @@ def create_funcionario(funcionario, id_setor, id_contrato):
 
     # Execução da query SQL
     try:
-        cursor.execute('INSERT INTO funcionario (nome, contrato, departamento) VALUES (?, ?, ?)', (funcionario, id_contrato, id_setor))
+        cursor.execute('INSERT INTO funcionario (nome, contrato, setor) VALUES (?, ?, ?)', (funcionario, id_contrato, id_setor))
         conn.commit()
     except sqlite3.OperationalError as e:
         print(f"Erro ao inserir funcionário: {e}")
@@ -189,15 +189,16 @@ def delete_funcionario(id_funcionario):
 
     return id_funcionario, nome_funcionario, id_contrato, id_setor
                
+               
 # CRUD Ponto
-def create_register(data, setor, tipo_funcionario, nome_funcionario, hora_entrada, hora_saida, observacao):
+def create_register(data, id_setor, id_contrato, id_funcionario, entrada, saida, observacao):
     conn = sqlite3.connect('../ponto.db')
     cursor = conn.cursor()
 
     cursor.execute('''
-        INSERT INTO ponto (data, setor, tipo_funcionario, nome_funcionario, hora_entrada, hora_saida, observacao)
+        INSERT INTO ponto (data, setor, contrato, funcionario, entrada, saida, observacao)
         VALUES (?, ?, ?, ?, ?, ?, ?)
-    ''', (data, setor, tipo_funcionario, nome_funcionario, hora_entrada, hora_saida, observacao))
+    ''', (data, id_setor, id_contrato, id_funcionario, entrada, saida, observacao))
 
     conn.commit()
     conn.close()
@@ -212,15 +213,15 @@ def read_registers():
     conn.close()
     return rows
 
-def update_register(id, data, setor, tipo_funcionario, nome_funcionario, hora_entrada, hora_saida, observacao):
+def update_register(id, data, id_setor, id_contrato, id_funcionario, entrada, saida, observacao):
     conn = sqlite3.connect('../ponto.db')
     cursor = conn.cursor()
 
     cursor.execute('''
         UPDATE ponto
-        SET data = ?, setor = ?, tipo_funcionario = ?, nome_funcionario = ?, hora_entrada = ?, hora_saida = ?, observacao = ?
+        SET data = ?, setor = ?, contrato = ?, nome_funcionario = ?, entrada = ?, saida = ?, observacao = ?
         WHERE id = ?
-    ''', (data, setor, tipo_funcionario, nome_funcionario, hora_entrada, hora_saida, observacao, id))
+    ''', (data, id_setor, id_contrato, id_funcionario, entrada, saida, observacao, id))
 
     conn.commit()
     conn.close()
