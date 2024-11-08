@@ -17,6 +17,7 @@ def create_db():
             setor INTEGER,
             contrato INTEGER,
             funcionario INTEGER,
+            genero INTEGER,
             entrada1 TEXT,
             saida1 TEXT,
             entrada2 TEXT,
@@ -24,6 +25,7 @@ def create_db():
             observacao TEXT,
             FOREIGN KEY (funcionario) REFERENCES funcionario(id),
             FOREIGN KEY (contrato) REFERENCES contrato(id),
+            FOREIGN KEY (genero) REFERENCES genero(id),
             FOREIGN KEY (setor) REFERENCES setor(id)
         )
     ''')
@@ -40,6 +42,22 @@ def create_db():
     ''')
     conn.commit()
 
+    # tabela de usuarios
+    cursor.execute('''
+        CREATE TABLE IF NOT EXISTS genero (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            genero TEXT,
+        )
+    ''')
+    conn.commit()
+
+    """
+    # insert de tipos de contrato
+    cursor.execute("INSERT INTO generp (generp) VALUES ('MASCULINO')")
+    cursor.execute("INSERT INTO generp (generp) VALUES ('FEMININO')")
+    conn.commit()
+    """    
+    
     # tabela de tipos de contrato
     cursor.execute('''
         CREATE TABLE IF NOT EXISTS contrato (
@@ -70,8 +88,10 @@ def create_db():
         CREATE TABLE IF NOT EXISTS funcionario (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             nome TEXT,
+            genero INTEGER,
             contrato INTEGER,
             setor INTEGER,
+            FOREIGN KEY (genero) REFERENCES genero(id),
             FOREIGN KEY (contrato) REFERENCES contrato(id),
             FOREIGN KEY (setor) REFERENCES setor(id)
         )

@@ -159,7 +159,7 @@ def get_contrato_id(nome_contrato):
 ##########################################################################################################################################
 
 # CRUD Funcionário
-def create_funcionario(funcionario, id_setor, id_contrato):
+def create_funcionario(funcionario, genero, id_setor, id_contrato):
     # Caminho do banco de dados
     current_dir = os.path.dirname(os.path.abspath(__file__))
     db_path = os.path.join(current_dir, '../ponto.db')
@@ -170,7 +170,7 @@ def create_funcionario(funcionario, id_setor, id_contrato):
 
     # Execução da query SQL
     try:
-        cursor.execute('INSERT INTO funcionario (nome, contrato, setor) VALUES (?, ?, ?)', (funcionario, id_contrato, id_setor))
+        cursor.execute('INSERT INTO funcionario (nome, genero, contrato, setor) VALUES (?, ?, ?)', (funcionario, genero, id_contrato, id_setor))
         conn.commit()
     except sqlite3.OperationalError as e:
         print(f"Erro ao inserir funcionário: {e}")

@@ -6,19 +6,21 @@ with st.form("cadastrar_funcionario"):
     st.write("### Cadastrar Funcionário")
     
     with st.container():
-        col1, col2, col3 = st.columns(3)
+        col1, col2, col3, col4 = st.columns(3)
 
         setores = read_setors()
         contratos = read_contratos()
         
         # Extrair nomes dos setores e tipos de contrato
         opcoes_setores = [nome for _, nome in setores]
-        opcoes_contrato = [nome for _, nome in contratos]   
+        opcoes_contrato = [nome for _, nome in contratos]
+        opcoes_genero = ["MASCULINO", "FEMININO"]   
         
         # Colunas de formulário
         with col1: funcionario = st.text_input('Nome do funcionário:')
-        with col2: setor = st.selectbox("Setor:", opcoes_setores)
-        with col3: contrato = st.selectbox("Contrato:", opcoes_contrato)
+        with col2: genero = st.selectbox("Gênero:", opcoes_genero)
+        with col3: setor = st.selectbox("Setor:", opcoes_setores)
+        with col4: contrato = st.selectbox("Contrato:", opcoes_contrato)
 
     # Submissão do formulário
     if st.form_submit_button("Cadastrar"):
