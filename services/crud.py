@@ -247,7 +247,26 @@ def get_funcionario_id(nome_funcionario):
         return None
     finally:
          conn.close()
-         
+      
+def get_funcionario_name(id_funcionario):
+    # Caminho do banco de dados
+    current_dir = os.path.dirname(os.path.abspath(__file__))
+    db_path = os.path.join(current_dir, '../ponto.db')
+
+    # Conexão ao banco de dados
+    conn = sqlite3.connect(db_path)
+    cursor = conn.cursor()
+    
+    try:
+        cursor.execute("SELECT nome FROM funcionario WHERE id = ?", (id_funcionario,))
+        result = cursor.fetchone()
+        return result[0] if result else None
+    except sqlite3.OperationalError as e:
+        print(f"Erro ao buscar nome do funcionário: {e}")
+        return None
+    finally:
+         conn.close()         
+
 ##########################################################################################################################################
                
 # CRUD Ponto
@@ -273,14 +292,28 @@ def create_register(data, id_setor, id_contrato, id_funcionario, entrada1, saida
         conn.close()
 
 def read_registers():
-    conn = sqlite3.connect('../ponto.db')
+    # Caminho do banco de dados
+    current_dir = os.path.dirname(os.path.abspath(__file__))
+    db_path = os.path.join(current_dir, '../ponto.db')
+
+    # Conexão ao banco de dados com row_factory
+    conn = sqlite3.connect(db_path)
+    conn.row_factory = sqlite3.Row  # Para acessar colunas por nome
     cursor = conn.cursor()
 
-    cursor.execute('SELECT * FROM ponto')
-    rows = cursor.fetchall()
-
-    conn.close()
-    return rows
+    try: 
+        cursor.execute('SELECT * FROM ponto')
+        rows = cursor.fetchall()
+        
+        # Convertendo para lista de dicionários para uso no DataFrame
+        data = [dict(row) for row in rows]
+    except sqlite3.OperationalError as e:
+        print(f"Erro ao ler dados de ponto: {e}")
+        data = []
+    finally:
+        conn.close()
+         
+    return data
 
 def update_register(id, data, id_setor, id_contrato, id_funcionario, entrada1, saida1, entrada2, saida2, observacao):
     conn = sqlite3.connect('../ponto.db')

@@ -37,9 +37,14 @@ if st.session_state["authentication_status"] is True:
     st.divider()
 
     #páginas do app
-    in_out = st.Page("pages/punch_in_out.py", title="Registrar Ponto", icon="⌛", default=True)
+    ponto = st.Page("pages/ponto_avulso.py", title="Registrar Ponto Avulso", icon="⌛", default=True)
+    atrasos = st.Page("pages/atraso.py", title="Registrar Atraso")
+    ausencia = st.Page("pages/ausencia.py", title="Registrar Ausência")
+    
     diary = st.Page("pages/diary.py", title="Resumo Diário e Mensal", icon="📆")
     delete_register = st.Page("pages/delete_register.py", title="Excluir Registro", icon="🗑️")
+    
+    
     
     register_func = st.Page("pages/register_func.py", title="Cadastrar/Excluir Funcionários", icon="📓")
     register_dept = st.Page("pages/register_dept.py", title="Cadastrar/Excluir Departamentos", icon="📒")
@@ -49,7 +54,7 @@ if st.session_state["authentication_status"] is True:
     #navegação
     pg = st.navigation(
         {
-            "Ponto": [in_out, diary, delete_register],
+            "Ponto": [ponto, atrasos, ausencia],
             "Cadastros e Exclusões": [register_func, register_dept],
             "Métricas:": [metrics],
         }
