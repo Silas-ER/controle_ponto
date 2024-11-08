@@ -6,7 +6,7 @@ with st.form("cadastrar_funcionario"):
     st.write("### Cadastrar Funcionário")
     
     with st.container():
-        col1, col2, col3, col4 = st.columns(3)
+        col1, col2, col3, col4 = st.columns(4)
 
         setores = read_setors()
         contratos = read_contratos()
