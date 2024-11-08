@@ -38,18 +38,15 @@ if st.session_state["authentication_status"] is True:
 
     #páginas do app
     ponto = st.Page("pages/ponto_avulso.py", title="Registrar Ponto Avulso", icon="⌛", default=True)
-    atrasos = st.Page("pages/atraso.py", title="Registrar Atraso")
-    ausencia = st.Page("pages/ausencia.py", title="Registrar Ausência")
+    atrasos = st.Page("pages/atraso.py", title="Registrar Atraso", icon="📙")
+    ausencia = st.Page("pages/ausencia.py", title="Registrar Ausência", icon="📕")
     
-    diary = st.Page("pages/diary.py", title="Resumo Diário e Mensal", icon="📆")
-    delete_register = st.Page("pages/delete_register.py", title="Excluir Registro", icon="🗑️")
+    diary = st.Page("pages/livro_registro.py", title="Resumo Diário e Mensal", icon="📆")
     
+    register_func = st.Page("pages/cad_del_func.py", title="Cadastrar/Excluir Funcionários", icon="📓")
+    register_dept = st.Page("pages/cad_del_setor.py", title="Cadastrar/Excluir Setores", icon="📒")
     
-    
-    register_func = st.Page("pages/register_func.py", title="Cadastrar/Excluir Funcionários", icon="📓")
-    register_dept = st.Page("pages/register_dept.py", title="Cadastrar/Excluir Departamentos", icon="📒")
-    
-    metrics =  st.Page("pages/metrics.py", title="Métricas de funcionários", icon="📊")
+    metrics =  st.Page("pages/exibir_dados.py", title="Métricas de funcionários", icon="📊")
     
     #navegação
     pg = st.navigation(
