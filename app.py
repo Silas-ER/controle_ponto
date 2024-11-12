@@ -41,7 +41,8 @@ if st.session_state["authentication_status"] is True:
     atrasos = st.Page("pages/atraso.py", title="Registrar Atraso", icon="📙")
     ausencia = st.Page("pages/ausencia.py", title="Registrar Ausência", icon="📕")
     
-    diary = st.Page("pages/livro_registro.py", title="Resumo Diário e Mensal", icon="📆")
+    diary = st.Page("pages/livro_registro_diario.py", title="Resumo Diário", icon="📆")
+    month = st.Page("pages/livro_registro_mensal.py", title="Resumo Mensal", icon="📆")
     
     register_func = st.Page("pages/cad_del_func.py", title="Cadastrar/Excluir Funcionários", icon="📓")
     register_dept = st.Page("pages/cad_del_setor.py", title="Cadastrar/Excluir Setores", icon="📒")
@@ -53,6 +54,7 @@ if st.session_state["authentication_status"] is True:
         {
             "Ponto": [ponto, atrasos, ausencia],
             "Cadastros e Exclusões": [register_func, register_dept],
+            "Conferência de Dados": [diary, month],
             "Métricas:": [metrics],
         }
     )

@@ -43,7 +43,7 @@ if 'contrato_selecionado' not in st.session_state:
     st.session_state['contrato_selecionado'] = ""
 
 # Layout para registrar ponto
-st.write("### Registrar Ponto")
+st.write("### Registrar Ponto Avulso")
 
 with st.container():
     col1, col2, col3, col4 = st.columns([1.6,0.8,0.8,0.8])
