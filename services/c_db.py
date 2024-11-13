@@ -46,17 +46,17 @@ def create_db():
     cursor.execute('''
         CREATE TABLE IF NOT EXISTS genero (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
-            genero TEXT,
+            genero TEXT
         )
     ''')
     conn.commit()
 
-    """
+    
     # insert de tipos de contrato
-    cursor.execute("INSERT INTO generp (generp) VALUES ('MASCULINO')")
-    cursor.execute("INSERT INTO generp (generp) VALUES ('FEMININO')")
+    cursor.execute("INSERT INTO genero (genero) VALUES ('MASCULINO')")
+    cursor.execute("INSERT INTO genero (genero) VALUES ('FEMININO')")
     conn.commit()
-    """    
+ 
     
     # tabela de tipos de contrato
     cursor.execute('''

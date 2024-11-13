@@ -158,8 +158,69 @@ def get_contrato_id(nome_contrato):
          
 ##########################################################################################################################################
 
+# CRUD Genero
+def read_generos():
+    current_dir = os.path.dirname(os.path.abspath(__file__))
+    db_path = os.path.join(current_dir, '../ponto.db')
+
+    conn = sqlite3.connect(db_path)
+    cursor = conn.cursor()
+
+    try:
+        cursor.execute('SELECT * FROM genero')
+        rows = cursor.fetchall()
+    except sqlite3.OperationalError as e:
+        print(f"Erro ao ler tipos de genero: {e}")
+    finally:
+         conn.close()
+
+    return rows
+
+def get_genero_name(genero_id):
+    current_dir = os.path.dirname(os.path.abspath(__file__))
+    db_path = os.path.join(current_dir, '../ponto.db')
+
+    conn = sqlite3.connect(db_path)
+    cursor = conn.cursor()
+
+    try:
+        cursor.execute('SELECT genero FROM genero WHERE id = ?', (genero_id,))
+        genero_nome = cursor.fetchone()
+        if genero_nome:
+            genero_nome = genero_nome[0]
+        else:
+            genero_nome = None
+    except sqlite3.OperationalError as e:
+        print(f"Erro ao ler genero: {e}")
+        genero_nome = None
+    finally:
+        conn.close()
+
+    return genero_nome
+
+def get_genero_id(nome_genero):
+    # Caminho do banco de dados
+    current_dir = os.path.dirname(os.path.abspath(__file__))
+    db_path = os.path.join(current_dir, '../ponto.db')
+
+    # Conexão ao banco de dados
+    conn = sqlite3.connect(db_path)
+    cursor = conn.cursor()
+    
+    try:
+        cursor.execute("SELECT id FROM genero WHERE genero = ?", (nome_genero,))
+        result = cursor.fetchone()
+        return result[0] if result else None
+    except sqlite3.OperationalError as e:
+        print(f"Erro ao buscar genero: {e}")
+        return None
+    finally:
+         conn.close()
+         
+##########################################################################################################################################
+
 # CRUD Funcionário
-def create_funcionario(funcionario, genero, id_setor, id_contrato):
+def create_funcionario(funcionario, id_genero, id_contrato, id_setor):
     # Caminho do banco de dados
     current_dir = os.path.dirname(os.path.abspath(__file__))
     db_path = os.path.join(current_dir, '../ponto.db')
@@ -170,7 +231,7 @@ def create_funcionario(funcionario, genero, id_setor, id_contrato):
 
     # Execução da query SQL
     try:
-        cursor.execute('INSERT INTO funcionario (nome, genero, contrato, setor) VALUES (?, ?, ?)', (funcionario, genero, id_contrato, id_setor))
+        cursor.execute('INSERT INTO funcionario (nome, genero, contrato, setor) VALUES (?, ?, ?, ?)', (funcionario, id_genero, id_contrato, id_setor))
         conn.commit()
     except sqlite3.OperationalError as e:
         print(f"Erro ao inserir funcionário: {e}")
@@ -270,7 +331,7 @@ def get_funcionario_name(id_funcionario):
 ##########################################################################################################################################
                
 # CRUD Ponto
-def create_register(data, id_setor, id_contrato, id_funcionario, entrada1, saida1, entrada2, saida2, observacao):
+def create_register(data, id_setor, id_contrato, id_funcionario, id_genero, entrada1, saida1, entrada2, saida2, observacao):
     # Caminho do banco de dados
     current_dir = os.path.dirname(os.path.abspath(__file__))
     db_path = os.path.join(current_dir, '../ponto.db')
@@ -282,9 +343,9 @@ def create_register(data, id_setor, id_contrato, id_funcionario, entrada1, saida
     # Execução da query SQL
     try:
         cursor.execute('''
-        INSERT INTO ponto (data, setor, contrato, funcionario, entrada1, saida1, entrada2, saida2, observacao)
-        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
-                       ''', (data, id_setor, id_contrato, id_funcionario, entrada1, saida1, entrada2, saida2, observacao))
+        INSERT INTO ponto (data, setor, contrato, funcionario, genero, entrada1, saida1, entrada2, saida2, observacao)
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                       ''', (data, id_setor, id_contrato, id_funcionario, id_genero, entrada1, saida1, entrada2, saida2, observacao))
         conn.commit()
     except sqlite3.OperationalError as e:
         print(f"Erro ao inserir setor: {e}")

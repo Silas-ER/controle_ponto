@@ -1,20 +1,21 @@
 import streamlit as st
-from services.crud import create_funcionario, delete_funcionario, read_setors, read_contratos, read_funcionarios
+from services.crud import create_funcionario, delete_funcionario, read_setors, read_contratos, read_funcionarios, read_generos
 from services.crud import get_setor_name, get_contrato_name
 
 with st.form("cadastrar_funcionario"):
     st.write("### Cadastrar Funcionário")
     
     with st.container():
-        col1, col2, col3, col4 = st.columns(4)
+        col1, col2, col3, col4 = st.columns([1.5, 0.9, 0.8, 0.8])
 
         setores = read_setors()
         contratos = read_contratos()
+        generos = read_generos()
         
         # Extrair nomes dos setores e tipos de contrato
         opcoes_setores = [nome for _, nome in setores]
-        opcoes_contrato = [nome for _, nome in contratos]
-        opcoes_genero = ["MASCULINO", "FEMININO"]   
+        opcoes_contrato = [nome for _, nome in contratos]   
+        opcoes_genero = [nome for _, nome in generos] 
         
         # Colunas de formulário
         with col1: funcionario = st.text_input('Nome do funcionário:')
@@ -26,17 +27,19 @@ with st.form("cadastrar_funcionario"):
     if st.form_submit_button("Cadastrar"):
         try:
             # Encontrar o setor e contrato selecionados
-            setor_selecionado = next((t for t in setores if t[1] == setor), None)
+            genero_selecionado = next((t for t in generos if t[1] == genero), None)
             contrato_selecionado = next((t for t in contratos if t[1] == contrato), None)
-
-            if setor_selecionado and contrato_selecionado:
-                id_setor, nome_departamento = setor_selecionado
+            setor_selecionado = next((t for t in setores if t[1] == setor), None)
+            
+            if setor_selecionado and contrato_selecionado and genero_selecionado:
+                id_genero, nome_genero = genero_selecionado
                 id_contrato, nome_contrato = contrato_selecionado
+                id_setor, nome_departamento = setor_selecionado
                 
-                create_funcionario(funcionario, id_setor, id_contrato)
+                create_funcionario(funcionario, id_genero, id_contrato, id_setor)
                 st.success("Funcionário cadastrado com sucesso!")
             else:
-                st.error("Erro: setor ou contrato não encontrado.")
+                st.error("Erro: setor, genero ou contrato não encontrado.")
         except Exception as e:
             st.error(f"Erro ao cadastrar funcionário: {e}")
            

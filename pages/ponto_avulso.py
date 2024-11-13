@@ -1,7 +1,8 @@
 import streamlit as st
-from services.crud import read_funcionarios, read_contratos, read_setors
+from services.crud import read_funcionarios, read_contratos, read_setors, read_generos
 from datetime import datetime
-from services.crud import get_setor_name, get_contrato_name, get_contrato_id, get_setor_id, get_funcionario_id
+from services.crud import get_setor_name, get_contrato_name, get_genero_name
+from services.crud import get_contrato_id, get_setor_id, get_funcionario_id, get_genero_id
 from services.crud import create_register
 
 # Funções para validar data e hora
@@ -25,15 +26,19 @@ def atualizar_dados_funcionario():
     if funcionarios_selecionado:
         funcionario = next((f for f in funcionarios if f[1] == funcionarios_selecionado), None)
         if funcionario:
-            id_setor = funcionario[3]
-            id_contrato = funcionario[2]
+            id_setor = funcionario[4]
+            id_contrato = funcionario[3]
+            id_genero = funcionario[2]
             st.session_state['setor_selecionado'] = get_setor_name(id_setor)
             st.session_state['contrato_selecionado'] = get_contrato_name(id_contrato)
-
+            st.session_state['genero_selecionado'] = get_genero_name(id_genero)
+            
 # Carregar dados iniciais de setores, contratos e funcionários
 setores = read_setors()
 contratos = read_contratos()
 funcionarios = read_funcionarios()
+generos = read_generos()
+
 nome_funcionarios = [nome for id, nome, *_ in funcionarios]
 
 # Inicializar session_state para setor e contrato selecionados
@@ -41,12 +46,14 @@ if 'setor_selecionado' not in st.session_state:
     st.session_state['setor_selecionado'] = ""
 if 'contrato_selecionado' not in st.session_state:
     st.session_state['contrato_selecionado'] = ""
-
+if 'genero_selecionado' not in st.session_state:
+    st.session_state['genero_selecionado'] = ""
+    
 # Layout para registrar ponto
 st.write("### Registrar Ponto Avulso")
 
 with st.container():
-    col1, col2, col3, col4 = st.columns([1.6,0.8,0.8,0.8])
+    col1, col2, col3, col4 = st.columns([1.7,1,0.6,0.8])
 
     # Campos para selecionar o funcionário e data
     with col1: st.selectbox('Nome do funcionário:', nome_funcionarios, key="funcionario_selecionado", on_change=atualizar_dados_funcionario)
@@ -85,11 +92,12 @@ if st.button("Registrar"):
         id_funcionario = get_funcionario_id(st.session_state["funcionario_selecionado"])
         id_setor = get_setor_id(st.session_state['setor_selecionado'])
         id_contrato = get_contrato_id(st.session_state['contrato_selecionado'])
+        id_genero = get_genero_id(st.session_state['genero_selecionado'])
         
         if id_funcionario and id_setor and id_contrato:
             create_register(
                 str(data_valida), id_setor, id_contrato, 
-                id_funcionario, str(hora_entrada1_valida), str(hora_saida1_valida), 
+                id_funcionario, id_genero, str(hora_entrada1_valida), str(hora_saida1_valida), 
                 str(hora_entrada2_valida), str(hora_saida2_valida), observacao
             )
             st.success("Ponto registrado com sucesso!") 
