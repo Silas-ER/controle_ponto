@@ -397,3 +397,99 @@ def delete_register(id):
 
     conn.commit()
     conn.close()
+
+##########################################################################################################################################
+
+# CRUD ATRASO
+def create_register_atraso(data, hora, id_funcionario, observacao):
+    # Caminho do banco de dados
+    current_dir = os.path.dirname(os.path.abspath(__file__))
+    db_path = os.path.join(current_dir, '../ponto.db')
+
+    # Conexão ao banco de dados
+    conn = sqlite3.connect(db_path)
+    cursor = conn.cursor()
+
+    # Execução da query SQL
+    try:
+        cursor.execute('''
+        INSERT INTO atraso (data, hora, funcionario, observacao)
+        VALUES (?, ?, ?, ?)
+                       ''', (data, hora, id_funcionario, observacao))
+        conn.commit()
+    except sqlite3.OperationalError as e:
+        print(f"Erro ao inserir atraso: {e}")
+    finally:
+        conn.close()
+
+def read_atrasos():
+    # Caminho do banco de dados
+    current_dir = os.path.dirname(os.path.abspath(__file__))
+    db_path = os.path.join(current_dir, '../ponto.db')
+
+    # Conexão ao banco de dados com row_factory
+    conn = sqlite3.connect(db_path)
+    conn.row_factory = sqlite3.Row  # Para acessar colunas por nome
+    cursor = conn.cursor()
+
+    try: 
+        cursor.execute('SELECT * FROM atraso')
+        rows = cursor.fetchall()
+        
+        # Convertendo para lista de dicionários para uso no DataFrame
+        data = [dict(row) for row in rows]
+    except sqlite3.OperationalError as e:
+        print(f"Erro ao ler dados de ponto: {e}")
+        data = []
+    finally:
+        conn.close()
+         
+    return data
+
+##########################################################################################################################################
+
+# CRUD ATRASO
+def create_register_ausencia(data, hora, id_funcionario, observacao):
+    # Caminho do banco de dados
+    current_dir = os.path.dirname(os.path.abspath(__file__))
+    db_path = os.path.join(current_dir, '../ponto.db')
+
+    # Conexão ao banco de dados
+    conn = sqlite3.connect(db_path)
+    cursor = conn.cursor()
+
+    # Execução da query SQL
+    try:
+        cursor.execute('''
+        INSERT INTO atraso (data, hora, funcionario, observacao)
+        VALUES (?, ?, ?, ?)
+                       ''', (data, hora, id_funcionario, observacao))
+        conn.commit()
+    except sqlite3.OperationalError as e:
+        print(f"Erro ao inserir atraso: {e}")
+    finally:
+        conn.close()
+
+def read_ausencias():
+    # Caminho do banco de dados
+    current_dir = os.path.dirname(os.path.abspath(__file__))
+    db_path = os.path.join(current_dir, '../ponto.db')
+
+    # Conexão ao banco de dados com row_factory
+    conn = sqlite3.connect(db_path)
+    conn.row_factory = sqlite3.Row  # Para acessar colunas por nome
+    cursor = conn.cursor()
+
+    try: 
+        cursor.execute('SELECT * FROM ausencia')
+        rows = cursor.fetchall()
+        
+        # Convertendo para lista de dicionários para uso no DataFrame
+        data = [dict(row) for row in rows]
+    except sqlite3.OperationalError as e:
+        print(f"Erro ao ler dados de ponto: {e}")
+        data = []
+    finally:
+        conn.close()
+         
+    return data

@@ -3,7 +3,7 @@ import sqlite3, os
 def create_db():
     conn = sqlite3.connect('../ponto.db')
     cursor = conn.cursor()
-    
+    """
     cursor.execute('''
                    DROP TABLE IF EXISTS ponto
                      ''')
@@ -51,12 +51,12 @@ def create_db():
     ''')
     conn.commit()
 
-    
+ 
     # insert de tipos de contrato
     cursor.execute("INSERT INTO genero (genero) VALUES ('MASCULINO')")
     cursor.execute("INSERT INTO genero (genero) VALUES ('FEMININO')")
     conn.commit()
- 
+    
     
     # tabela de tipos de contrato
     cursor.execute('''
@@ -67,13 +67,13 @@ def create_db():
     ''')
     conn.commit()
     
-    """
+    
     # insert de tipos de contrato
     cursor.execute("INSERT INTO contrato (contrato) VALUES ('AVULSO')")
     cursor.execute("INSERT INTO contrato (contrato) VALUES ('CTPS')")
     conn.commit()
     """
-    
+    """
     # tabela de tipos de setores
     cursor.execute('''
         CREATE TABLE IF NOT EXISTS setor (
@@ -97,7 +97,34 @@ def create_db():
         )
     ''')
     conn.commit()
-
+    """
+    
+    # tabela de ATRASOS
+    cursor.execute('''
+        CREATE TABLE IF NOT EXISTS atraso (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            data TEXT,
+            hora TEXT,
+            funcionario INTEGER,
+            observacao TEXT,
+            FOREIGN KEY (funcionario) REFERENCES funcionario(id)
+        )
+    ''')
+    conn.commit()
+    
+    # tabela de AUSENCIAS
+    cursor.execute('''
+        CREATE TABLE IF NOT EXISTS ausencia (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            data TEXT,
+            hora TEXT,
+            funcionario INTEGER,
+            observacao TEXT,
+            FOREIGN KEY (funcionario) REFERENCES funcionario(id)
+        )
+    ''')
+    conn.commit()
+    
     conn.close()
 
 if __name__ == '__main__':

@@ -43,19 +43,17 @@ with st.form("cadastrar_funcionario"):
         except Exception as e:
             st.error(f"Erro ao cadastrar funcionário: {e}")
            
-########################################################################################################################
+#######################################################################################################################################
 st.divider()    
-########################################################################################################################          
+#######################################################################################################################################        
            
 # Extrair dados dos funcionários
 funcionarios = read_funcionarios()
 nomes_funcionarios = [nome for _, nome, *_ in funcionarios]
 
 # Inicializar session_state para setor e contrato
-if 'setor_selecionado' not in st.session_state:
-    st.session_state['setor_selecionado'] = ""
-if 'contrato_selecionado' not in st.session_state:
-    st.session_state['contrato_selecionado'] = ""
+if 'setor_selecionado' not in st.session_state: st.session_state['setor_selecionado'] = ""
+if 'contrato_selecionado' not in st.session_state: st.session_state['contrato_selecionado'] = ""
     
 # Função para atualizar setor e contrato com base no funcionário selecionado
 def atualizar_dados_funcionario():
@@ -63,8 +61,8 @@ def atualizar_dados_funcionario():
     if funcionarios_del:
         funcionario = next((f for f in funcionarios if f[1] == funcionarios_del), None)
         if funcionario:
-            id_setor = funcionario[3]
-            id_contrato = funcionario[2]
+            id_setor = funcionario[4]
+            id_contrato = funcionario[3]
             st.session_state['setor_selecionado'] = get_setor_name(id_setor)
             st.session_state['contrato_selecionado'] = get_contrato_name(id_contrato)
             st.session_state['id_funcionario'] = funcionario[0]  # Guardar o ID para deletar depois
@@ -76,14 +74,11 @@ with st.container():
     col1, col2, col3 = st.columns(3)
 
     # Campo para selecionar o funcionário
-    with col1:
-        st.selectbox('Nome do funcionário:', nomes_funcionarios, key="funcionario_selecionado", on_change=atualizar_dados_funcionario)
+    with col1: st.selectbox('Nome do funcionário:', nomes_funcionarios, key="funcionario_selecionado", on_change=atualizar_dados_funcionario)
 
     # Exibir setor e contrato atualizados
-    with col2:
-        st.text_input('Setor:', st.session_state['setor_selecionado'], disabled=True)
-    with col3:
-        st.text_input('Contrato:', st.session_state['contrato_selecionado'], disabled=True)
+    with col2: st.text_input('Setor:', st.session_state['setor_selecionado'], disabled=True)
+    with col3: st.text_input('Contrato:', st.session_state['contrato_selecionado'], disabled=True)
                     
     # Botão para deletar o funcionário
     if st.button("Deletar"):
