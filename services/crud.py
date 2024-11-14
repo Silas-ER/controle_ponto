@@ -448,8 +448,8 @@ def read_atrasos():
 
 ##########################################################################################################################################
 
-# CRUD ATRASO
-def create_register_ausencia(data, hora, id_funcionario, observacao):
+# CRUD AUSENCIA
+def create_register_ausencia(data, id_funcionario, observacao):
     # Caminho do banco de dados
     current_dir = os.path.dirname(os.path.abspath(__file__))
     db_path = os.path.join(current_dir, '../ponto.db')
@@ -461,9 +461,9 @@ def create_register_ausencia(data, hora, id_funcionario, observacao):
     # Execução da query SQL
     try:
         cursor.execute('''
-        INSERT INTO atraso (data, hora, funcionario, observacao)
-        VALUES (?, ?, ?, ?)
-                       ''', (data, hora, id_funcionario, observacao))
+        INSERT INTO ausencia (data, funcionario, observacao)
+        VALUES (?, ?, ?)
+                       ''', (data, id_funcionario, observacao))
         conn.commit()
     except sqlite3.OperationalError as e:
         print(f"Erro ao inserir atraso: {e}")

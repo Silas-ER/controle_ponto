@@ -33,33 +33,38 @@ def atualizar_dados_funcionario():
     if funcionarios_del:
         funcionario = next((f for f in funcionarios if f[1] == funcionarios_del), None)
         if funcionario:
-            id_setor = funcionario[3]
-            id_contrato = funcionario[2]
+            id_setor = funcionario[4]
+            id_contrato = funcionario[3]
             st.session_state['setor_selecionado'] = get_setor_name(id_setor)
             st.session_state['contrato_selecionado'] = get_contrato_name(id_contrato)
             st.session_state['id_funcionario'] = funcionario[0]  # Guardar o ID para deletar depois
 
 # Formulário para deletar funcionário
-st.write("### Deletar Funcionário")
+st.write("### Registrar Atraso")
     
 with st.container():
-    col1, col2, col3 = st.columns(3)
+    col1, col2, col3 = st.columns([1.4, 0.8, 0.8])
 
     # Campo para selecionar o funcionário
-    with col1:
-        st.selectbox('Nome do funcionário:', nomes_funcionarios, key="funcionario_selecionado", on_change=atualizar_dados_funcionario)
+    with col1: st.selectbox('Nome do funcionário:', nomes_funcionarios, key="funcionario_selecionado", on_change=atualizar_dados_funcionario)
 
     # Exibir setor e contrato atualizados
-    with col2:
-        st.text_input('Setor:', st.session_state['setor_selecionado'], disabled=True)
-    with col3:
-        st.text_input('Contrato:', st.session_state['contrato_selecionado'], disabled=True)
-                    
-    # Botão para deletar o funcionário
-    if st.button("Deletar"):
+    with col2: st.text_input('Setor:', st.session_state['setor_selecionado'], disabled=True)
+    with col3: st.text_input('Contrato:', st.session_state['contrato_selecionado'], disabled=True)
+    
+    col1, col2, col3 = st.columns([0.6, 0.6, 1.8])
+    
+    # Campos para data, hora e motivo do atraso
+    with col1: data = st.text_input('Data do atraso:', key="data_atraso", placeholder="DD/MM/YYYY")
+    if data: data = validar_data(data)
+    with col2: hora = st.text_input('Hora do atraso:', key="hora_atraso", placeholder="HH:MM")
+    if hora: hora = validar_hora(hora)
+    with col3: motivo = st.text_input('Motivo do atraso:', key="motivo_atraso")                    
+    
+    # Botão para registrar atraso
+    if st.button("Cadastrar"):
         try:
-            delete_funcionario(st.session_state['id_funcionario'])
-            st.success("Funcionário deletado com sucesso!")
+            create_register_atraso(data, hora, st.session_state['id_funcionario'], motivo)
+            st.success("Atraso registrado com sucesso!")
         except Exception as e:
-            st.error(f"Erro ao deletar funcionário: {e}")
-           
+            st.error(f"Erro ao cadastrar atraso: {e}")

@@ -112,12 +112,16 @@ def create_db():
     ''')
     conn.commit()
     
+    cursor.execute('''
+            DROP TABLE IF EXISTS ausencia
+            ''')
+    conn.commit()
+    
     # tabela de AUSENCIAS
     cursor.execute('''
         CREATE TABLE IF NOT EXISTS ausencia (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             data TEXT,
-            hora TEXT,
             funcionario INTEGER,
             observacao TEXT,
             FOREIGN KEY (funcionario) REFERENCES funcionario(id)
