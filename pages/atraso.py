@@ -61,10 +61,15 @@ with st.container():
     if hora: hora = validar_hora(hora)
     with col3: motivo = st.text_input('Motivo do atraso:', key="motivo_atraso")                    
     
+
+            
     # Botão para registrar atraso
     if st.button("Cadastrar"):
+        # Converter hora para string, caso tenha sido validada com sucesso
+        hora_str = hora.strftime('%H:%M') if hora else None
+        
         try:
-            create_register_atraso(data, hora, st.session_state['id_funcionario'], motivo)
+            create_register_atraso(data, hora_str, st.session_state['id_funcionario'], motivo)
             st.success("Atraso registrado com sucesso!")
         except Exception as e:
             st.error(f"Erro ao cadastrar atraso: {e}")

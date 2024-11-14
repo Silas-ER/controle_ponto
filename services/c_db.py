@@ -99,6 +99,11 @@ def create_db():
     conn.commit()
     """
     
+    cursor.execute('''
+            DROP TABLE IF EXISTS atraso
+            ''')
+    conn.commit()    
+    
     # tabela de ATRASOS
     cursor.execute('''
         CREATE TABLE IF NOT EXISTS atraso (
@@ -111,11 +116,7 @@ def create_db():
         )
     ''')
     conn.commit()
-    
-    cursor.execute('''
-            DROP TABLE IF EXISTS ausencia
-            ''')
-    conn.commit()
+
     
     # tabela de AUSENCIAS
     cursor.execute('''
