@@ -14,3 +14,4 @@ col1, col2 = st.columns([1, 1])
 # Filtro Data
 with col1: data = st.date_input('Data:', pd.to_datetime('today').date())
 
+ 
