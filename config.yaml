@@ -10,7 +10,8 @@ credentials:
       email: rh@produmar.ind.br
       logged_in: False
       name: Grécia
-      password: 123456
+      password: rhpessoal
+      
 cookie:
   expiry_days: 1
   key: some_signinature_key

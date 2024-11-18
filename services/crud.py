@@ -1,4 +1,5 @@
 import sqlite3, os
+import pandas as pd
 
 # CRUD Setor
 def create_setor(setor):
@@ -362,18 +363,18 @@ def read_registers():
     conn.row_factory = sqlite3.Row  # Para acessar colunas por nome
     cursor = conn.cursor()
 
-    try: 
+    try:
         cursor.execute('SELECT * FROM ponto')
         rows = cursor.fetchall()
         
-        # Convertendo para lista de dicionários para uso no DataFrame
-        data = [dict(row) for row in rows]
+        # Convertendo para DataFrame
+        data = pd.DataFrame([dict(row) for row in rows])
     except sqlite3.OperationalError as e:
         print(f"Erro ao ler dados de ponto: {e}")
-        data = []
+        data = pd.DataFrame()  # Retorna um DataFrame vazio em caso de erro
     finally:
         conn.close()
-         
+
     return data
 
 def update_register(id, data, id_setor, id_contrato, id_funcionario, entrada1, saida1, entrada2, saida2, observacao):
@@ -432,18 +433,18 @@ def read_atrasos():
     conn.row_factory = sqlite3.Row  # Para acessar colunas por nome
     cursor = conn.cursor()
 
-    try: 
+    try:
         cursor.execute('SELECT * FROM atraso')
         rows = cursor.fetchall()
         
-        # Convertendo para lista de dicionários para uso no DataFrame
-        data = [dict(row) for row in rows]
+        # Convertendo para DataFrame
+        data = pd.DataFrame([dict(row) for row in rows])
     except sqlite3.OperationalError as e:
-        print(f"Erro ao ler dados de ponto: {e}")
-        data = []
+        print(f"Erro ao ler dados de atraso: {e}")
+        data = pd.DataFrame()  # Retorna um DataFrame vazio em caso de erro
     finally:
         conn.close()
-         
+
     return data
 
 ##########################################################################################################################################
@@ -480,16 +481,16 @@ def read_ausencias():
     conn.row_factory = sqlite3.Row  # Para acessar colunas por nome
     cursor = conn.cursor()
 
-    try: 
+    try:
         cursor.execute('SELECT * FROM ausencia')
         rows = cursor.fetchall()
         
-        # Convertendo para lista de dicionários para uso no DataFrame
-        data = [dict(row) for row in rows]
+        # Convertendo para DataFrame
+        data = pd.DataFrame([dict(row) for row in rows])
     except sqlite3.OperationalError as e:
-        print(f"Erro ao ler dados de ponto: {e}")
-        data = []
+        print(f"Erro ao ler dados de ausencia: {e}")
+        data = pd.DataFrame()  # Retorna um DataFrame vazio em caso de erro
     finally:
         conn.close()
-         
+
     return data

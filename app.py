@@ -36,30 +36,39 @@ if st.session_state["authentication_status"] is True:
     
     st.divider()
 
-    #páginas do app
-    ponto = st.Page("pages/ponto_avulso.py", title="Registrar Ponto Avulso", icon="⌛", default=True)
-    atrasos = st.Page("pages/atraso.py", title="Registrar Atraso", icon="📙")
-    ausencia = st.Page("pages/ausencia.py", title="Registrar Ausência", icon="📕")
+    if st.session_state["name"] == "admin":
+        metrics =  st.Page("pages/exibir_dados.py", title="Métricas de funcionários", icon="📊", default=True)
+        
+        #navegação
+        pg = st.navigation(
+            {
+                "Métricas:": [metrics],
+            }
+        )
+        pg.run()
+        
+    else:
+        #páginas do app
+        ponto = st.Page("pages/ponto_avulso.py", title="Registrar Ponto Avulso", icon="⌛", default=True)
+        atrasos = st.Page("pages/atraso.py", title="Registrar Atraso", icon="📙")
+        ausencia = st.Page("pages/ausencia.py", title="Registrar Ausência", icon="📕")
+        
+        diary = st.Page("pages/livro_registro_diario.py", title="Resumo Diário", icon="📆")
+        month = st.Page("pages/livro_registro_mensal.py", title="Resumo Mensal", icon="📆")
+        
+        register_func = st.Page("pages/cad_del_func.py", title="Cadastrar/Excluir Funcionários", icon="📓")
+        register_dept = st.Page("pages/cad_del_setor.py", title="Cadastrar/Excluir Setores", icon="📒")
     
-    diary = st.Page("pages/livro_registro_diario.py", title="Resumo Diário", icon="📆")
-    month = st.Page("pages/livro_registro_mensal.py", title="Resumo Mensal", icon="📆")
-    
-    register_func = st.Page("pages/cad_del_func.py", title="Cadastrar/Excluir Funcionários", icon="📓")
-    register_dept = st.Page("pages/cad_del_setor.py", title="Cadastrar/Excluir Setores", icon="📒")
-    
-    metrics =  st.Page("pages/exibir_dados.py", title="Métricas de funcionários", icon="📊")
-    
-    #navegação
-    pg = st.navigation(
-        {
-            "Ponto": [ponto, atrasos, ausencia],
-            "Cadastros e Exclusões": [register_func, register_dept],
-            "Conferência de Dados": [diary, month],
-            "Métricas:": [metrics],
-        }
-    )
-    
-    pg.run()
+        #navegação
+        pg = st.navigation(
+            {
+                "Ponto": [ponto, atrasos, ausencia],
+                "Cadastros e Exclusões": [register_func, register_dept],
+                "Conferência de Dados": [diary, month],
+            }
+        )
+        
+        pg.run()
     
 
 elif st.session_state["authentication_status"] is False:
